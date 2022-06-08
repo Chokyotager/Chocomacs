@@ -1,0 +1,50 @@
+{
+
+  "run-file": "1a11_charmm.pdb",
+  "run-name": "TEST",
+  "output-dir": "test_out/",
+
+  "gromacs-bin": "gmx",
+
+  "log-level": 2,
+
+  "pbc": "cubic",
+  "pbc-boundary-nm": 2,
+  "copies": 1,
+
+  "topology": {
+
+    "force-field": "charmm36-jul2021",
+    "custom-topology-dir": null,
+    "water-model": "tip3p"
+
+  },
+
+  "solvation": {
+
+    "water": true,
+    "ions": [
+
+      {"positive-ion": "POT", "negative-ion": "CLA", "concentration-M": 0.15, "neutralise": true},
+      {"positive-ion": "LIT", "negative-ion": "CLA", "concentration-M": 0.02, "neutralise": true}
+
+    ]
+
+  },
+
+  "steps": [{"reference": "mini.mdp",
+             "simulation-length-picoseconds": 0.01,
+             "femtoseconds-per-step": 0.001,
+              "additional-configs": null},
+
+            {"reference": "eq.mdp",
+             "simulation-length-picoseconds": 125,
+             "femtoseconds-per-step": 2,
+             "additional-configs": null},
+
+            {"reference": "md.mdp",
+             "simulation-length-picoseconds": 100,
+             "femtoseconds-per-step": 2,
+             "additional-configs": null}]
+
+}
