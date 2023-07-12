@@ -22,11 +22,11 @@ pme_order           =  4
 
 ; output control
 nstxout             =  0
-nstxtcout           =  500
+nstxtcout           =  10000
 nstvout             =  0
 nstfout             =  0
-nstlog              =  500
-nstenergy           =  500
+nstlog              =  10000
+nstenergy           =  10000
 
 ; Temperature coupling is on
 tcoupl                  = V-rescale

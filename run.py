@@ -78,23 +78,22 @@ shutil.copy(config["run-file"], input_file)
 
 logger.log(2, "Generating topology")
 
-execute_gmx("pdb2gmx -f {} -o $OUT_DIR$/step$STEP$_read.gro -p $OUT_DIR$/topol.top -i $OUT_DIR$/posre.itp -n $OUT_DIR$/index.ndx -ff {} -water {}".format(input_file, topology["force-field"], topology["water-model"]), step=current_step)
+execute_gmx("pdb2gmx -f {} -o $OUT_DIR$/step$STEP$_read.gro -i $OUT_DIR$/posre.itp -p $OUT_DIR$/topol.top -n $OUT_DIR$/index.ndx -ff {} -water {} -ignh -ter".format(input_file, topology["force-field"], topology["water-model"]), step=current_step)
 
 current_step += 1
 
 logger.log(2, "Generating periodic boundaries")
 
 # Centre and PBC accordingly
-output = execute_gmx("editconf -f $OUT_DIR$/step$LAST_STEP$_read.gro -princ -n $OUT_DIR$/index.ndx -ndef 1 -o $OUT_DIR$/step$STEP$_pbc.gro -bt {} -d {}".format(config["pbc"], str(config["pbc-boundary-nm"])), step=current_step)
-ut = config["output-dir"] + "/step{}_pbc.gro".format(current_step)
+precommand = "printf '%s\n' 0"
+output = execute_gmx("editconf -f $OUT_DIR$/step$LAST_STEP$_read.gro -princ -o $OUT_DIR$/step$STEP$_pbc.gro -bt {} -d {}".format(config["pbc"], str(config["pbc-boundary-nm"])), step=current_step, precommand=precommand)
+last_out = config["output-dir"] + "/step{}_pbc.gro".format(current_step)
 
 current_step += 1
 
 box_size = [float(x) for x in get_parameter(output, "new system size :")]
-box_volume = float(get_parameter(output, "new box volume")[1])
 
 logger.log(2, "Box size is: {} (nm)".format(box_size))
-logger.log(2, "Box volume is: {} nm^3".format(box_volume))
 
 solvation = config["solvation"]
 
